@@ -1,6 +1,7 @@
 import warnings
 import pandas as pd
 import seaborn as sns
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import cm as cm
 warnings.filterwarnings("ignore")
@@ -32,7 +33,7 @@ def kernel_density_estimation(df, col, name="Colum", bw_adjust=0.1):
     pplot.set(title=name)
 
 
-def pichart_plot(df, col="class"):
+def piechart_plot(df, col="class"):
     """
     Pie chart de la clase que estamos tratando de predecir, para clarificar
     el desbalance de la data en esos casos
@@ -50,6 +51,7 @@ def pichart_plot(df, col="class"):
     Pie chart con el plot de los datos.
 
     """
+    mpl.rcParams['font.size'] = 25
     description = pd.DataFrame(df[col].value_counts())
     description.reset_index(drop=False, inplace=True)
     description.columns = ["clase", "conteo"]
@@ -62,7 +64,7 @@ def pichart_plot(df, col="class"):
     ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
            shadow=True, startangle=90)
     ax.axis('equal')
-    plt.title("Pie chart Desbalance Clases", fontsize=30)
+    plt.title("Pie chart Desbalance Clases", fontsize=25)
 
 
 def pairplot_df(df, col1, col2, path="images/results/pairplot"):
@@ -97,8 +99,8 @@ def pairplot_df(df, col1, col2, path="images/results/pairplot"):
     # plt.scatter(df[[col1]].to_numpy(), df[[col1]].to_numpy(),
     #             color='blue')
     # filtro de posibilidad
-    plt.ylim(df[col1].quantile(0.1), df[col1].quantile(0.9))
-    plt.xlim(df[col2].quantile(0.1), df[col2].quantile(0.9))
+    plt.ylim(df[col1].quantile(0.02), df[col1].quantile(0.98))
+    plt.xlim(df[col2].quantile(0.02), df[col2].quantile(0.98))
     # plt.ylim(0, df[col1].quantile(0.99))
     # plt.xlim(0, df[col2].quantile(0.99))
     # restricciones
@@ -163,16 +165,41 @@ def plot_sequence(df, col):
     plt.show()
 
 
-def correlation_matrix(df):
-    fig = plt.figure()
-    ax1 = fig.add_subplot(111)
-    cmap = cm.get_cmap('jet', 30)
-    cax = ax1.imshow(df.corr(), interpolation="nearest", cmap=cmap)
-    ax1.grid(True)
-    plt.title('Abalone Feature Correlation')
-    labels = list(df.columns)
-    ax1.set_xticklabels(labels, fontsize=6)
-    ax1.set_yticklabels(labels, fontsize=6)
-    fig.colorbar(cax, ticks=[.75, .8, .85, .90, .95, 1])
-    plt.show()
-    plt.show()
+def correlation_matrix(df, method="pearson"):
+    """
+    Hacer matriz de correlaciones según distintos métodos de correlación,
+    para analizar a simple vista los datos
+
+    Parameters
+    ----------
+    df : dataframe
+        dataset que estamos analizando.
+    method : string, optional
+        método de correlación soportados por libreria pandas
+        {‘pearson’, ‘kendall’, ‘spearman’} .
+        The default is "pearson".
+
+    Returns
+    -------
+    None.
+
+    """
+    letter_size = 25
+    fig = plt.figure(figsize=(22, 12))
+    ax = fig.add_subplot(111)
+    cmap = cm.get_cmap('hot_r', 30)
+    ax = fig.add_subplot(111)
+    size = int(len(list(df.columns))/2)
+    corr = df.corr(method=method)
+    fig, ax = plt.subplots(figsize=(size, size))
+    ax.matshow(corr, cmap=cmap)
+    plt.xticks(range(len(corr.columns)), corr.columns, fontsize=letter_size)
+    plt.yticks(range(len(corr.columns)), corr.columns, fontsize=letter_size)
+    ax.set_xticklabels(df.columns, fontsize=letter_size)
+    ax.set_yticklabels(df.columns, fontsize=letter_size)
+    plt.xticks(rotation=90)
+    # plt.yticks(rotation=90)
+    ax.set_title(f"Matriz de correlación, método: {method}",
+                 fontname="Arial", fontsize=letter_size+10)
+    path = f"results/correlations/{method}.png"
+    fig.savefig(path)
