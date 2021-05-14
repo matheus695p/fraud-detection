@@ -5,9 +5,9 @@
 Repo donde se hace el análisis de detección de fraude para Rappi.
 
 
-## EDA
+# EDA
 
-# Desbalance del target del problema
+## Desbalance del target del problema
 
 
 <p align="center">
@@ -15,7 +15,7 @@ Repo donde se hace el análisis de detección de fraude para Rappi.
 </p>
 
 
-# Correlación de variables
+## Correlación de variables
 
 El coeficiente de correlación de Pearson (r) es una medida de correlación lineal entre dos variables. Su valor se encuentra entre -1 y +1, -1 indica una correlación lineal negativa total, 0 indica que no hay correlación lineal y 1 indica una correlación lineal positiva total. Además, r es invariante bajo cambios separados en la ubicación y escala de las dos variables, lo que implica que para una función lineal el ángulo con el eje x no afecta a r.
 
@@ -33,7 +33,7 @@ De manera similar al coeficiente de correlación de rangos de Spearman, el coefi
 
 
 <p align="center">
-  <img src="./results/correlations/kendall.png">
+  <img src="./results/correlations/spearman.png">
 </p>
 
 
