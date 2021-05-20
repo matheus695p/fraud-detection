@@ -1,4 +1,5 @@
 import pandas as pd
+import seaborn as sns
 from src.eda.exploratory_data_analysis import profiling_report
 from src.utils.visualizations import (piechart_plot, pairplot_df,
                                       correlation_matrix)
@@ -14,6 +15,8 @@ df = pd.read_csv(path)
 # se puede ver mucho desbalance de clases en los datos, es mejor tratarlo
 # como un problema de detección de anomalias
 piechart_plot(df, col="class")
+sns.countplot(x='class', data=df)
+
 
 # ver correlaciones
 correlation_matrix(df, method="pearson")
