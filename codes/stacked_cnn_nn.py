@@ -131,7 +131,6 @@ print(f'Mejor theshold={thresholds[ix]}, G-Mean={gmeans[ix]}')
 
 # buscar el mejor thesh
 thresh = thresholds[ix]
-thresh = 0.5
 y_pred = stacked_model.predict(x=[x_test_nn, x_test_cnn])
 y_pred = pd.DataFrame(y_pred, columns=["pred"])
 y_pred["pred"] = y_pred["pred"].apply(lambda x: 1 if x > thresh else 0)
