@@ -3,7 +3,7 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import (recall_score, roc_curve)
+from sklearn.metrics import (recall_score, roc_curve, confusion_matrix)
 from src.preprocessing.preprocessing import supervised_preparation
 from src.analytics.stacked_models import (create_nn, create_cnn2d)
 from src.utils.visualizations import (watch_classification_distribution,
@@ -16,7 +16,9 @@ args = stacked_neural_net_arguments()
 # cargar datos
 path = "data/creditcard_featured.csv"
 df = pd.read_csv(path)
-
+# cargar datos oversampling
+path = "data/creditcard_oversampling.csv"
+oversampling = pd.read_csv(path)
 # # targets y features
 targets = ["class"]
 features = list(df.columns)
@@ -24,17 +26,34 @@ for tar in targets:
     features.remove(tar)
 x = df[features]
 y = df[targets]
+# data oversampling
+x_over = oversampling[features]
+y_over = oversampling[targets]
 
 # división del conjunto de datos
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, test_size=args.validation_size, stratify=y,
     random_state=args.random_state)
-
 watch_classification_distribution(y_train, y_test)
 
 # trabajar con numpy array
 x_train_nn, y_train = supervised_preparation(x_train, y_train)
 x_test_nn, y_test = supervised_preparation(x_test, y_test)
+
+# concatenar la data oversampling solo en el conjunto de entrenamiento
+# esta no puede ser usada en el conjunto de test dado que es data ficticia
+x_train_nn = np.concatenate([x_train_nn, x_over], axis=0)
+y_train = np.concatenate([y_train, y_over], axis=0)
+
+# concatenar para randomizar los datos
+x = np.concatenate([x_train_nn, y_train], axis=1)
+x = pd.DataFrame(x)
+x = x.sample(frac=1).to_numpy()
+
+# separar entre x_train_nn e y_train_nn
+x_train_nn = x[:, 0:-1]
+y_train_nn = x[:, -1]
+y_train_nn = np.reshape(y_train_nn, (-1, 1))
 
 # Normalización de los datos
 sc = MinMaxScaler(feature_range=(0, 1))
@@ -82,7 +101,7 @@ print(stacked_model.summary())
 stacked_model.compile(loss=args.loss_function, optimizer=args.optimizer)
 
 # penalization
-weights = {0: 1, 1: 600}
+weights = {0: 1, 1: 1}
 
 # llamar callbacks de early stopping
 tf.keras.callbacks.Callback()
@@ -131,9 +150,16 @@ print(f'Mejor theshold={thresholds[ix]}, G-Mean={gmeans[ix]}')
 
 # buscar el mejor thesh
 thresh = thresholds[ix]
+thresh = 0.5
 y_pred = stacked_model.predict(x=[x_test_nn, x_test_cnn])
 y_pred = pd.DataFrame(y_pred, columns=["pred"])
 y_pred["pred"] = y_pred["pred"].apply(lambda x: 1 if x > thresh else 0)
 y_pred = y_pred.to_numpy()
 recall = recall_score(y_test, y_pred.round(), average="binary")
 print(thresh, recall)
+
+
+cm = confusion_matrix(y_test, y_pred.round())
+(tn, fp, fn, tp) = cm.flatten()
+print("Recall:", tp / (tp + fn) * 100)
+print("Precision:", tp / (tp + fp) * 100)
