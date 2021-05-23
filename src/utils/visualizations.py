@@ -385,3 +385,90 @@ def plot_confusion_matrix(df_confusion, title='Matriz de confusion',
     # plt.tight_layout()
     plt.ylabel(df_confusion.index.name)
     plt.xlabel(df_confusion.columns.name)
+
+
+def latent_space_visualization(latent_representation, labels, letter_size=20):
+    """
+    Función para establecer la representación del espacio latente de un
+    autoencoder en función de las clases, con el fin de distinguir si
+    el espacio latente es capaz de separar las clases unas de las otras
+    visualmente
+
+    Parameters
+    ----------
+    latent_representation : numpy.array
+        representación del espacio latente.
+    labels : array
+        labels.
+    letter_size : int, optional
+        tamaño de la letra. The default is 20.
+
+    Returns
+    -------
+    plots del espacio latente, todas las variables vs todas.
+
+    """
+    latent_representation = pd.DataFrame(latent_representation)
+    labels = pd.DataFrame(labels, columns=["clase"])
+    for col in latent_representation.columns:
+        new_col = "z_" + str(col)
+        latent_representation.rename(columns={col: new_col}, inplace=True)
+    for col1 in latent_representation.columns:
+        for col2 in latent_representation.columns:
+            if col1 == col2:
+                pass
+            else:
+                z_space = pd.concat([latent_representation, labels], axis=1)
+                fig, ax = plt.subplots(1, figsize=(22, 12))
+                plt.scatter(z_space[z_space["clase"] == 0][col1],
+                            z_space[z_space["clase"] == 0][col2], s=1,
+                            c='g', alpha=0.3, label='Legitimo')
+                plt.scatter(z_space[z_space["clase"] == 1][col1],
+                            z_space[z_space["clase"] == 1][col2], s=2,
+                            c='r', alpha=1, label='Fraude')
+                # corte en el espacio latente
+                plt.xlim(z_space[col1].quantile(0.001),
+                         z_space[col1].quantile(0.998))
+                plt.ylim(z_space[col2].quantile(0.001),
+                         z_space[col2].quantile(0.998))
+                titulo = "Representación espacio latente"
+                plt.title(titulo, fontsize=30)
+                plt.xlabel(col1, fontsize=30)
+                plt.ylabel(col2, fontsize=30)
+                ax.tick_params(axis='both', which='major',
+                               labelsize=letter_size)
+                plt.legend([f'{col1} vs {col2}'], loc='upper left',
+                           prop={'size': letter_size+5})
+                plt.show()
+
+
+def vae_latent_space(z_test, y_test, letter_size=20):
+    """
+    Representación del espacio latente de un variational autoencoder
+
+    Parameters
+    ----------
+    z_test : numpy.array
+        encoder.predict() representación del espacio latente del vae.
+    y_test : numpy.array
+        darle los labels.
+    letter_size : int, optional
+        Tamaño de la letra en el gráfico. The default is 20.
+
+    Returns
+    -------
+    Plot del espacio latente.
+
+    """
+    fig, ax = plt.subplots(1, figsize=(22, 12))
+    plt.scatter(z_test[:, 0], z_test[:, 1], c=y_test,
+                alpha=.4, s=3**2, cmap='viridis')
+    titulo = "Representación espacio latente"
+    plt.title(titulo, fontsize=letter_size)
+    plt.xlabel("Media", fontsize=letter_size)
+    plt.ylabel("Varianza", fontsize=letter_size)
+    ax.tick_params(axis='both', which='major',
+                   labelsize=letter_size)
+    plt.legend(["Media", "Varianza"], loc='upper left',
+               prop={'size': letter_size+5})
+    plt.show()
