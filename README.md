@@ -2,10 +2,74 @@
 
 # fraud-detection
 
-Repo donde se hace el análisis de detección de fraude para Rappi.
+
+## Organización del repositorio
+
+Repo donde se hace el análisis de detección de fraude para Rappi, los códigos están ordenados de acuerdo al siguiente arbol.
+
+```sh
+├───codes      ---> Carpeta códigos usados para hacer el proyecto
+│   ├───eda                  ---> Carpeta donde están los scripts del análisis exploratorio realizado al dataset
+│   ├───oversampling         ---> Carpeta donde están los scripts del proceso de sobre muestreo realizado al dataset para obtener más datos
+│   ├───predictors           ---> Carpeta donde están los scripts de todos los predictores
+│   └───preprocessing        ---> Carpeta donde están los scripts de todo el proceso de feature engenieering realizado al dataset
+├───data                     ---> Carpeta donde siendo guardados los datos que van pasando de un proceso a otro
+├───results    ---> Carpeta donde siendo guardados imagenes que estan saliendo de los procesos
+│   ├───correlations         ---> Carpeta donde se guardan algunas correlaciones lineales y no lineales de los datos
+│   ├───exploratory-analysis ---> Carpeta donde se guardan los .html y .png de los resultados exploratorios de los datos
+│   ├───imbalance-target     ---> Carpeta donde se muestra desbalance de la data
+│   ├───models               ---> Carpeta donde se guardan resultados de entrenamientos de modelos
+│   └───scatter-plot         ---> Carpeta donde se hacen plots scatter para ver tendencias entre las variables
+└───src       ---> Carpeta de modulos (clases y funciones del proyecto)
+    ├───analytics            ---> Módulo analitico donde se encuetran funciones para transformaciones, metricas y modelos           
+    ├───config               ---> Módulo de configuraciones de scripts, donde se guardan hiperparametros de modelos utilizados
+    ├───eda                  ---> Módulo para hacer análisis exploratorios de datos
+    ├───preprocessing        ---> Módulo para hacer preprocesamiento de datos
+    └───utils                ---> Módulo para guardar funciones útilies y visualizaciones
+```
+## Librerias necearias
+
+```sh
+$ git clone https://github.com/matheus695p/fraud-detection.git
+$ cd fraud-detection
+$ pip install -r requirements.txt
+
+El requirements fue sacado de un 
+
+$ pip freeze > requirements.txt
+
+A un ambiente con el que trabajé por lo tanto muestra todos los paquetes instalados en ese ambiente, algunos por ser por conda, pueden venir con rutas locales,
+en el caso de que fallé hacer la siguiente lista de comandos en el primer ambiente que tendrá tensorflow
 
 
-# EDA
+$ pip install pandas
+$ pip install pandas-profiling
+$ pip install scikit-learn
+$ pip install statsmodels
+$ pip install matplotlib
+$ pip install seaborn
+$ pip install imblearn
+$ pip install xgboost
+$ pip install tensorflow-gpu==2.4.0  [esta versión me permite traerme cuda v11 que es lo que necesita mi GPU como driver]
+$ pip install autopep8
+
+
+Para el segundo ambiente, ocuparemos por debajo pytorch para entrenar las redes generativas adversarias a través de tabgan
+este problema ocurre debido a las versiones de cuda incompatibles entre tensorflow y pytorch, si quieres entrenar todo en CPU
+podrías juntar ambas listas de paquetes, pero no lo recomiendo por la velocidad de entrenamiento en GPU es un 20 X.
+
+$ pip install pandas
+$ pip install tabgan
+$ pip install scikit-learn
+
+```
+
+
+
+
+
+
+# EDA (Análisis exploratorio de los datos)
 
 ## Desbalance del target del problema
 
