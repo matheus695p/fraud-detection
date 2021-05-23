@@ -51,8 +51,7 @@ $ pip install seaborn
 $ pip install imblearn
 $ pip install xgboost
 $ pip install tensorflow-gpu==2.4.0  [esta versión me permite traerme cuda v11 que es lo que necesita mi GPU como driver]
-$ pip install autopep8
-
+$ pip install autoplotter
 
 Para el segundo ambiente, ocuparemos por debajo pytorch para entrenar las redes generativas adversarias a través de tabgan
 este problema ocurre debido a las versiones de cuda incompatibles entre tensorflow y pytorch, si quieres entrenar todo en CPU
@@ -63,10 +62,17 @@ $ pip install tabgan
 $ pip install scikit-learn
 
 ```
+# Proceso de limpieza de los datos
+
+El proceso de limpieza busca ordenar, hacer visibles los nans en el dataframe convertir a float las columnas que sean numericas y renombrar las columnas
+para que estas estén en mimusculas y sin espacios con el fin de evitar futuros problemas con conexiones a bases de datos.
 
 
-
-
+```zh
+├───codes  
+    └───preprocessing
+            cleaning.py    ---> Spript de limpieza de los datos
+```
 
 
 # EDA (Análisis exploratorio de los datos)
@@ -106,3 +112,24 @@ De manera similar al coeficiente de correlación de rangos de Spearman, el coefi
 </p>
 
 
+## Análisis exploratorio completo
+
+Dado que el análisis exploratorio por si solo no aporta valor a la solución del problema, decidí apoyarme en dos librerías que facilitan mucho este análisis, una es pandas-profiling y la otra autoplotter que permiten hacer visualizaciones muy rápidas de los datos logrando visualizar distribuciones, tipos de datos, datos faltantes, correlaciones, etc. Los códigos de estos análisis están en:
+
+
+```zh
+├───eda
+│       eda.py           ----> Análisis exploratorio con pandas profilling y librerias de visualización como matplotlib y seaborn
+│       autoploter.py    ----> Lanzar app para poder visualizar todo tipo de gráficos entre las variables en el explorador, sacar el puerto http://127.0.0.1:5000/ para la visualización
+
+├───results
+│   ├───exploratory-analysis
+│   │       expensive-computations-eda.html     ----> .html con el EDA de los datos limpios 
+│   │       no-expensive-computations-eda.html  ----> .html con el EDA de los datos limpios
+
+```
+
+
+
+
+# Feature Engineering
