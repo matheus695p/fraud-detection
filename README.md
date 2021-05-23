@@ -77,8 +77,25 @@ para que estas estén en mimusculas y sin espacios con el fin de evitar futuros 
 
 # EDA (Análisis exploratorio de los datos)
 
-## Desbalance del target del problema
+## Análisis exploratorio automatizado
 
+Dado que el análisis exploratorio por si solo no aporta valor a la solución del problema, decidí apoyarme en dos librerías que facilitan mucho este análisis, una es pandas-profiling y la otra autoplotter que permiten hacer visualizaciones muy rápidas de los datos logrando visualizar distribuciones, tipos de datos, datos faltantes, correlaciones, etc. Los códigos de estos análisis están en:
+
+
+```zh
+├───eda
+│       eda.py           ----> Análisis exploratorio con pandas profilling y librerias de visualización como matplotlib y seaborn
+│       autoploter.py    ----> Lanzar app para poder visualizar todo tipo de gráficos entre las variables en el explorador, sacar el puerto http://127.0.0.1:5000/ para la visualización
+
+├───results
+│   ├───exploratory-analysis
+│   │       expensive-computations-eda.html     ----> .html con el EDA de los datos limpios 
+│   │       no-expensive-computations-eda.html  ----> .html con el EDA de los datos limpios
+
+```
+
+
+## Desbalance de la columna target del problema
 
 <p align="center">
   <img src="./results/imbalance-target/pie_chart.png">
@@ -112,24 +129,37 @@ De manera similar al coeficiente de correlación de rangos de Spearman, el coefi
 </p>
 
 
-## Análisis exploratorio completo
+# Feature Engineering
 
-Dado que el análisis exploratorio por si solo no aporta valor a la solución del problema, decidí apoyarme en dos librerías que facilitan mucho este análisis, una es pandas-profiling y la otra autoplotter que permiten hacer visualizaciones muy rápidas de los datos logrando visualizar distribuciones, tipos de datos, datos faltantes, correlaciones, etc. Los códigos de estos análisis están en:
+
+El proceso de ingeniería de caracteristicas se desarrolla en dos etapas:
+
+1. Generación de nuevos features (exponenciales, logaritmicos y polinomiales)
+2. Eliminación de los features que no aporten valor a través de eliminación por correlaciones
+    * Si dos features poseen correlación muy altas, se elimina uno de esos dado que no aportan valor al problema
+
+```zh
+└───preprocessing
+        feature_engineering.py
+```
+
+Con este proceso se agregan variables que puedan aportar caracteristicas no lineales al problema que estamos tratando de resolver y que no estén correlacionadas entre ellas.
+
+
+# Baseline [Estudio de modelos]
+
+En este proceso me centraré en estudiar el problema, conociendo el desbalance en los datos, para ello, partiré con modelos simples, como los son la regresión logística, para ir avanzado en el modelodo hasta llegar a una linea base del problema.
 
 
 ```zh
-├───eda
-│       eda.py           ----> Análisis exploratorio con pandas profilling y librerias de visualización como matplotlib y seaborn
-│       autoploter.py    ----> Lanzar app para poder visualizar todo tipo de gráficos entre las variables en el explorador, sacar el puerto http://127.0.0.1:5000/ para la visualización
-
-├───results
-│   ├───exploratory-analysis
-│   │       expensive-computations-eda.html     ----> .html con el EDA de los datos limpios 
-│   │       no-expensive-computations-eda.html  ----> .html con el EDA de los datos limpios
-
+├───predictors
+│       baseline.py
+│       autoencoder.py
+│       xgboost.py
 ```
 
 
 
 
-# Feature Engineering
+
+
