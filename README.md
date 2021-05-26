@@ -65,7 +65,7 @@ $ pip install scikit-learn
 # Proceso de limpieza de los datos
 
 El proceso de limpieza busca ordenar, hacer visibles los nans en el dataframe convertir a float las columnas que sean numericas y renombrar las columnas
-para que estas estén en mimusculas y sin espacios con el fin de evitar futuros problemas con conexiones a bases de datos.
+para que estas estén en minusculas y sin espacios con el fin de evitar futuros problemas con conexiones a bases de datos.
 
 
 ```zh
@@ -152,13 +152,47 @@ En este proceso me centraré en estudiar el problema, conociendo el desbalance e
 
 
 ```zh
-├───predictors
-│       baseline.py
-│       autoencoder.py
-│       xgboost.py
+├───codes  
+    ├───predictors
+    │       baseline.py
+    │       autoencoder.py
+    │       xgboost.py
 ```
 
+El recall promedio del cross-validation y las búsqueda de hiperparámetros del XGBoost fue de 84 %, esta es la metrica de interes en este problema dado que nos interesa reducir los falsos negativos (se dice que la trasacción es legitima pero no lo es), el f1-score fue del 78 % para el mejor modelo XGBoost, lo cual muestra una precisión no tan baja.
 
+
+# Synthetic Data Generation [Aumento de data para la clase fraude]
+
+En este proceso me centraré en aumentar la data de la clase fraude para poder generar mejores predictores con una data más balanceada, ocuparé 3 técnicas
+
+* Smote (synthetic minority over-sampling technique) el cual generará interepolaciones en R^n de los vecinos más cercanos entre los datos de fraude, esta interpolación es super lineal y puede generar data muy distinta a la realidad, para ello meteré redes neuronales para extraer ejemplos no lineales de datos de fraude y poder generar data que no haya sido vista antes (vaes y gans)
+* VAE (variational autoencoders) en el cual resamplearé datos a partir la distribución de probabilidad generada en el espacio latente del VAE
+* Gan's (Generative adversarial networks) en el cual usando una librería llamada tabgan, generaré más ejemplos a partir de la una arquitectura super simple de dos capas (1 lstm y otra fully connected) tanto para el discriminador como para el generador
+
+Con la data generada por las 3 técnicas la concateno y entrenos los predictores, los códigos de las técnicas de oversampling los podemos ver en el siguiente arbol:
+
+```zh
+├───codes  
+    ├───oversampling
+    │       gan.py
+    │       smote.py
+    │       variational_autoencoders.py
+```
+
+# Predictors [Estudio de modelos]
+
+En este proceso me centraré en sacar el mejor recall posible utilizando diferentes arquitecturas, partiendo de redes fully connected y usando una arquitectura que tenga como entradas un extractor de caracteristicas (con capas convolucionales 2D) y una entrada fully connected, para ver si es posible sacar relaciones espaciales de la interacción de las caracteristicas, las arquitecturas son creadas de la siguiente forma, --> wx +b --> batch norm -- > activacion -- > dropout, no hubo mucha búsqueda de hiperparámetros, pero me quedo con  
+
+```zh
+├───codes  
+    ├───predictors
+    │       kfold_nn.py
+    │       nn.py
+    │       stacked_cnn_nn.py
+```
+
+El mejor resultado lo obtuve con la red fully connected en donde llegé a un recall en el conjunto de test de 99.8 %, pero el test contenia 98 de los 492 ejemplos reales de fraude que hay presentes, en el paso siguiente entrenaré la red solo con data sintetica y haré testing con toda la data real de fraude existente. La precisión de este predictor fue de un 82 %, también intentaré subir esta metrica, para que no hayan tantos falsos positivos en la predicción. Con esto realizado podríamos concluir el repo.
 
 
 
