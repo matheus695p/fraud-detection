@@ -5,7 +5,7 @@
 
 ## Organización del repositorio
 
-Repo donde se hace el análisis de detección de fraude para Rappi, los códigos están ordenados de acuerdo al siguiente arbol.
+Repo donde se hace el análisis de detección de fraude, los códigos están ordenados de acuerdo al siguiente arbol.
 
 ```sh
 ├───codes      ---> Carpeta códigos usados para hacer el proyecto
