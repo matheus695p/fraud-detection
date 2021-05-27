@@ -50,7 +50,7 @@ $ pip install matplotlib
 $ pip install seaborn
 $ pip install imblearn
 $ pip install xgboost
-$ pip install tensorflow-gpu==2.4.0  [esta versión me permite traerme cuda v11 que es lo que necesita mi GPU como driver]
+$ pip install tensorflow-gpu==2.4.0  [esta versión permite traerme cuda v11 que es lo que necesita mi GPU como driver]
 $ pip install autoplotter
 
 Para el segundo ambiente, ocuparemos por debajo pytorch para entrenar las redes generativas adversarias a través de tabgan
