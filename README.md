@@ -148,7 +148,7 @@ Con este proceso se agregan variables que puedan aportar caracteristicas no line
 
 # Baseline [Estudio de modelos]
 
-En este proceso me centraré en estudiar el problema, conociendo el desbalance en los datos, para ello, partiré con modelos simples, como los son la regresión logística, para ir avanzado en el modelodo hasta llegar a una linea base del problema.
+En este proceso me centraré en estudiar el problema, conociendo el desbalance en los datos, para ello, partiré con modelos simples, como los son la regresión logística, k-nearest neighbors en clasificación, support vector machines, arboles de desición y finalmente xgboost (roadmap de machine learning para clasificación) para ir avanzado en el modelodo hasta llegar a una linea base del problema.
 
 
 ```zh
