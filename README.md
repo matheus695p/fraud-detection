@@ -118,6 +118,9 @@ De manera similar al coeficiente de correlación de rangos de Spearman, el coefi
   <img src="./results/correlations/pearson.png">
 </p>
 
+Es lógico que de la salida de la correlación pearson salga una matriz plana con cero correlación, los features vienen de un PCA, por lo cual las componentes son
+ortogonales, no hay correlación lineal.
+
 
 <p align="center">
   <img src="./results/correlations/spearman.png">
