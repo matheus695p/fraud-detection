@@ -167,7 +167,7 @@ El recall promedio del cross-validation y las búsqueda de hiperparámetros del 
 
 # Synthetic Data Generation [Aumento de data para la clase fraude]
 
-En este proceso me centraré en aumentar la data de la clase fraude para poder generar mejores predictores con una data más balanceada, ocuparé 3 técnicas
+En este proceso me centraré en aumentar la data de la clase fraude para poder generar mejores predictores con una data más balanceada, ocuparé 3 técnicas, voy a dividir la data antes de hacer este proceso y solo ocuparé oversampling en los datos de entrenamiento (si no de alguna forma sería hacer trampa en el clasificador).
 
 * Smote (synthetic minority over-sampling technique) el cual generará interepolaciones en R^n de los vecinos más cercanos entre los datos de fraude, esta interpolación es super lineal y puede generar data muy distinta a la realidad, para ello meteré redes neuronales para extraer ejemplos no lineales de datos de fraude y poder generar data que no haya sido vista antes (vaes y gans)
 * VAE (variational autoencoders) en el cual resamplearé datos a partir la distribución de probabilidad generada en el espacio latente del VAE
