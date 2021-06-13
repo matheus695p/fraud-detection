@@ -195,7 +195,7 @@ En este proceso me centraré en sacar el mejor recall posible utilizando diferen
     │       stacked_cnn_nn.py
 ```
 
-El mejor resultado lo obtuve con la red fully connected en donde llegé a un recall en el conjunto de test de 99.8 %, pero el test contenia 98 de los 492 ejemplos reales de fraude que hay presentes, en el paso siguiente entrenaré la red solo con data sintetica y haré testing con toda la data real de fraude existente. La precisión de este predictor fue de un 82 %, también intentaré subir esta metrica, para que no hayan tantos falsos positivos en la predicción. Con esto realizado podríamos concluir el repo.
+El mejor resultado lo obtuve con la red fully connected en donde llegé a un recall en el conjunto de test de 99.8 %, La precisión de este predictor fue de un 82 %, pero el test contenia 98 de los 492 ejemplos reales de fraude que hay presentes, en el paso siguiente entrenaré la red solo con data sintetica y haré testing con toda la data real de fraude existente. También intentaré subir esta metrica, para que no hayan tantos falsos positivos en la predicción. Con esto realizado podríamos concluir el repo.
 
 
 
